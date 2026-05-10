@@ -76,3 +76,7 @@ The plugin requests:
 
 - `ReadApplicationState` — read available sessions
 - `ChangeApplicationState` — switch sessions
+
+## License
+
+MIT
