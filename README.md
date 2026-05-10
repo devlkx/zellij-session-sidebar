@@ -15,22 +15,19 @@ A small Zellij plugin that renders a permanent, Strider-style session sidebar.
 ## Requirements
 
 - Zellij `0.44.1`
-- Rust toolchain with the `wasm32-wasip1` target
 
-## Build
+## Install from release
+
+Download the prebuilt wasm from the latest GitHub release:
 
 ```bash
-rustup target add wasm32-wasip1
-cargo build --release --target wasm32-wasip1
+mkdir -p ~/.config/zellij/plugins
+curl -L \
+  https://github.com/devlkx/zellij-session-sidebar/releases/latest/download/zellij-session-sidebar.wasm \
+  -o ~/.config/zellij/plugins/zellij-session-sidebar.wasm
 ```
 
-The compiled plugin will be at:
-
-```text
-target/wasm32-wasip1/release/zellij-session-sidebar.wasm
-```
-
-## Zellij layout example
+Then add it to your Zellij layout:
 
 ```kdl
 layout {
@@ -46,6 +43,29 @@ layout {
         plugin location="compact-bar"
     }
 }
+```
+
+For example, if you downloaded it with the command above:
+
+```kdl
+plugin location="file:~/.config/zellij/plugins/zellij-session-sidebar.wasm"
+```
+
+Zellij will ask for plugin permissions the first time it loads the wasm.
+
+## Build from source
+
+Install Rust and the WASI target:
+
+```bash
+rustup target add wasm32-wasip1
+cargo build --release --target wasm32-wasip1
+```
+
+The compiled plugin will be at:
+
+```text
+target/wasm32-wasip1/release/zellij-session-sidebar.wasm
 ```
 
 For a personal config, keep the `plugin location` pointing to the same wasm path across rebuilds. Zellij caches plugin permissions by path, so changing the filename can require granting permissions again.
