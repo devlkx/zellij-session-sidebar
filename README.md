@@ -27,13 +27,13 @@ curl -L \
   -o ~/.config/zellij/plugins/zellij-session-sidebar.wasm
 ```
 
-Then add it to your Zellij layout:
+Then add the same path to your Zellij layout:
 
 ```kdl
 layout {
     pane split_direction="vertical" {
         pane size=28 borderless=true {
-            plugin location="file:/absolute/path/to/zellij-session-sidebar.wasm"
+            plugin location="file:~/.config/zellij/plugins/zellij-session-sidebar.wasm"
         }
 
         pane
@@ -43,12 +43,6 @@ layout {
         plugin location="compact-bar"
     }
 }
-```
-
-For example, if you downloaded it with the command above:
-
-```kdl
-plugin location="file:~/.config/zellij/plugins/zellij-session-sidebar.wasm"
 ```
 
 Zellij will ask for plugin permissions the first time it loads the wasm.
