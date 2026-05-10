@@ -33,8 +33,6 @@ impl ZellijPlugin for SessionSidebar {
         subscribe(&[
             EventType::Key,
             EventType::Mouse,
-            EventType::ModeUpdate,
-            EventType::Timer,
             EventType::PermissionRequestResult,
         ]);
         self.permission_status = PermissionState::Requested;
@@ -42,32 +40,26 @@ impl ZellijPlugin for SessionSidebar {
             PermissionType::ReadApplicationState,
             PermissionType::ChangeApplicationState,
         ]);
-        set_timeout(0.1);
     }
 
     fn update(&mut self, event: Event) -> bool {
         match event {
             Event::SessionUpdate(session_infos, _resurrectable_sessions) => {
+                if session_infos.is_empty() && !self.sessions.is_empty() {
+                    return false;
+                }
+
                 self.update_sessions(session_infos);
                 true
             }
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
-            Event::ModeUpdate(_) => true,
             Event::PermissionRequestResult(status) => {
                 if status == PermissionStatus::Granted {
                     self.permission_status = PermissionState::Granted;
                     subscribe(&[EventType::SessionUpdate]);
                 } else {
                     self.permission_status = PermissionState::Denied;
-                }
-                true
-            }
-            Event::Timer(_) => {
-                if self.sessions.is_empty()
-                    && !matches!(self.permission_status, PermissionState::Denied)
-                {
-                    set_timeout(1.0);
                 }
                 true
             }
@@ -199,8 +191,10 @@ impl SessionSidebar {
             }
             Mouse::Hover(line, _) => {
                 if let Some(index) = self.session_index_at_line(line) {
-                    self.selected = index;
-                    return true;
+                    if self.selected != index {
+                        self.selected = index;
+                        return true;
+                    }
                 }
                 false
             }
