@@ -1,6 +1,6 @@
 # zellij-session-sidebar
 
-A small Zellij plugin that renders a permanent, Strider-style session sidebar.
+A small Zellij plugin that adds a permanent session sidebar to Zellij.
 
 ## Features
 
@@ -27,10 +27,16 @@ curl -L \
   -o ~/.config/zellij/plugins/zellij-session-sidebar.wasm
 ```
 
-Then add the same path to your Zellij layout:
+## Add to a layout
+
+Add the plugin to a default-style Zellij layout:
 
 ```kdl
 layout {
+    pane size=1 borderless=true {
+        plugin location="tab-bar"
+    }
+
     pane split_direction="vertical" {
         pane size=28 borderless=true {
             plugin location="file:~/.config/zellij/plugins/zellij-session-sidebar.wasm"
@@ -39,8 +45,8 @@ layout {
         pane
     }
 
-    pane size=1 borderless=true {
-        plugin location="compact-bar"
+    pane size=2 borderless=true {
+        plugin location="status-bar"
     }
 }
 ```
