@@ -10,7 +10,7 @@ A small Zellij plugin that renders a permanent, Strider-style session sidebar.
 - Mouse hover selects a session
 - Mouse wheel moves the selection
 - Mouse click switches sessions
-- `Enter` switches to the selected session
+- Does not keep Zellij alive after all regular terminal panes exit
 
 ## Requirements
 
