@@ -38,7 +38,7 @@ layout {
     }
 
     pane split_direction="vertical" {
-        pane size=28 borderless=true {
+        pane name="Session Sidebar" size=28 borderless=true {
             plugin location="file:~/.config/zellij/plugins/zellij-session-sidebar.wasm"
         }
 
