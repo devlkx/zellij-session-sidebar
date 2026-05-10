@@ -1,0 +1,11 @@
+[package]
+name = "zellij-session-sidebar"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+zellij-tile = "=0.44.1"
+# Keep zellij-utils pinned to the installed Zellij version. zellij-tile's
+# transitive dependency otherwise resolves to newer patch versions.
+zellij-utils = "=0.44.1"
+unicode-width = "0.1"
