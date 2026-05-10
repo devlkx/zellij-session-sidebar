@@ -48,14 +48,7 @@ layout {
 }
 ```
 
-For a personal config, you may copy the built wasm to a stable filename and keep your layout pointing to that path. This avoids re-granting Zellij plugin permissions after every rebuild.
-
-Example:
-
-```bash
-cp target/wasm32-wasip1/release/zellij-session-sidebar.wasm \
-   target/wasm32-wasip1/release/zellij_session_sidebar_v8.wasm
-```
+For a personal config, keep the `plugin location` pointing to the same wasm path across rebuilds. Zellij caches plugin permissions by path, so changing the filename can require granting permissions again.
 
 ## Permissions
 
