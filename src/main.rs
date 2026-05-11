@@ -12,6 +12,7 @@ struct SessionSidebar {
     visible_start: usize,
     visible_end: usize,
     permission_status: PermissionState,
+    permission_requested: bool,
 }
 
 #[derive(Default)]
@@ -30,15 +31,15 @@ struct SessionRow {
 
 impl ZellijPlugin for SessionSidebar {
     fn load(&mut self, _configuration: BTreeMap<String, String>) {
-        // Do not keep Zellij alive when all regular terminal panes have exited.
-        set_selectable(false);
-
-        subscribe(&[EventType::Mouse, EventType::PermissionRequestResult]);
-        self.permission_status = PermissionState::Requested;
-        request_permission(&[
-            PermissionType::ReadApplicationState,
-            PermissionType::ChangeApplicationState,
+        set_selectable(true);
+        subscribe(&[
+            EventType::Mouse,
+            EventType::PermissionRequestResult,
+            EventType::Timer,
         ]);
+        self.permission_status = PermissionState::Requested;
+        self.permission_requested = false;
+        set_timeout(0.1);
     }
 
     fn update(&mut self, event: Event) -> bool {
@@ -52,7 +53,20 @@ impl ZellijPlugin for SessionSidebar {
                 true
             }
             Event::Mouse(mouse) => self.handle_mouse(mouse),
+            Event::Timer(_) => {
+                if !self.permission_requested {
+                    self.permission_requested = true;
+                    request_permission(&[
+                        PermissionType::ReadApplicationState,
+                        PermissionType::ChangeApplicationState,
+                    ]);
+                    return true;
+                }
+                false
+            }
             Event::PermissionRequestResult(status) => {
+                set_selectable(false);
+
                 if status == PermissionStatus::Granted {
                     self.permission_status = PermissionState::Granted;
                     subscribe(&[EventType::SessionUpdate]);
